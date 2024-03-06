@@ -1,4 +1,4 @@
-Simple containerized Node & MySQL as RestAPI for GET/POST requests
+Simple RestAPI with Node & MySQL containers
 
 ## Setup
 
