@@ -1,0 +1,29 @@
+version: '3'
+services:
+  mysql:
+    image: mysql/mysql-server:8.0.32
+    container_name: compose_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_USER: &user user
+      MYSQL_PASSWORD: &userpw userpw
+      MYSQL_DATABASE: &db db_name
+    network: mynet
+
+  express:
+    build: .
+    container_name: compose_express
+    depends_on:
+      - "mysql"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: *user
+      MYSQL_PASSWORD: *userpw
+      MYSQL_DATABASE: *db
+    ports: [3000:3000]
+    network: mynet
+
+network:
+  mynet:
+    driver: default
