@@ -45,7 +45,7 @@ Supporting `routes` of the current version:
 
 Both routes with JSON body
 ```json
-"user": "...", "authStr": "..."
+{ "user": "...", "authStr": "..." }
 ```
 
 ### Fetching
