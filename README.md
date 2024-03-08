@@ -7,7 +7,7 @@ This repository ⛺ provides `compose.yaml` composed of 2 services
 
 Here, I am using **volume** for the database service. This can also be done with a bind mount or without any persistent storage at all.
 
-## Environment
+## Environment Overview
 - Express.js
     - node:21.6.2
     - ```json
@@ -22,20 +22,35 @@ Here, I am using **volume** for the database service. This can also be done with
     - `MYSQL_ROOT_PASSWORD` = *rootpw*
     - `MYSQL_USER` = *user*
     - `MYSQL_PASSWORD` = *userpw*
-    - `MYSQL_DATABASE` = *db_name*
-        - Table is in the following format
+    - `MYSQL_DATABASE` = *myapp*
+        - One table storing app users.
+          ```console
+          ~$ describe user;
+          +-----------------------+----------+------+-----+---------+-------+
+          | Field                 | Type     | Null | Key | Default | Extra |
+          +-----------------------+----------+------+-----+---------+-------+
+          | user                  | char(32) | NO   | PRI |         |       |
+          | authentication_string | text     | YES  |     | NULL    |       |
+          +-----------------------+----------+------+-----+---------+-------+
+          ```
 
-## MySQL Database
-`MYSQL_ROOT_PASSWORD`
+```sql
+CREATE TABLE user(
+    user CHAR(32) NOT NULL DAFAULT '',
+    authentication_string TEXT,
+    PRIMARY KEY (user)
+);
+```
 
 ## Quick Setup
-create volume
-database: database_name
-    table: user
-
-
+1. Create volume
 ```shell
-docker 
+docker volume create myapp_volume
+```
+
+2. Run docker compose
+```shell
+docker compose up
 ```
 
 ## Usage
@@ -49,6 +64,7 @@ Both routes with JSON body
 ```
 
 ### Fetching
+This is normally done with node-fetch.
 ```node
 const response = await fetch('http://localhost:3000/user/register', {
     method: "POST",
@@ -57,8 +73,10 @@ const response = await fetch('http://localhost:3000/user/register', {
         authStr: "..."
     }
 });
+const data = await response.json();
+return data;
 ```
-> **_NOTE:_**  It is recommended to always check the status code of response after fetching &ndash; `200` means good to go.
+> **_NOTE:_** Check the status code of response after fetching &ndash; `200` means good to go.
 > ```node
 > console.log(response.status);
 > ```
