@@ -1,13 +1,5 @@
-Simple RestAPI with Node & MySQL containers
+## Simple dockerized Express.js & MySQL container system
 
-* look into volumeee
-
-routes: /user/auth user/register
-
-when using endpoint as client -> check status code 200 == ok
-EX.
-const response = await fetch('http://localhost:3000/user/auth');
-console.log(response.status); -> should be 200 if working fine
 
 This repository ⛺ provides `compose.yaml` composed of 2 services
 - Express.js App
@@ -27,16 +19,16 @@ Here, I am using **volume** for the database service. This can also be done with
       ```
 - MySQL
     - mysql/mysql-server:8.0.32
-    - `MYSQL_ROOT_PASSWORD`: *rootpw*
-    - `MYSQL_USER`: *user*
-    - `MYSQL_PASSWORD`: *userpw*
-    - `MYSQL_DATABASE`: *db_name*
-    - 
+    - `MYSQL_ROOT_PASSWORD` = *rootpw*
+    - `MYSQL_USER` = *user*
+    - `MYSQL_PASSWORD` = *userpw*
+    - `MYSQL_DATABASE` = *db_name*
+        - Table is in the following format
 
 ## MySQL Database
 `MYSQL_ROOT_PASSWORD`
 
-## Setup
+## Quick Setup
 create volume
 database: database_name
     table: user
@@ -45,3 +37,28 @@ database: database_name
 ```shell
 docker 
 ```
+
+## Usage
+Supporting `routes` of the current version:
+- `/user/auth` &ndash; GET
+- `/user/register` &ndash; POST
+
+Both routes with JSON body
+```json
+"user": "...", "authStr": "..."
+```
+
+### Fetching
+```node
+const response = await fetch('http://localhost:3000/user/register', {
+    method: "POST",
+    body: {
+        user: "...",
+        authStr: "..."
+    }
+});
+```
+> **_NOTE:_**  It is recommended to always check the status code of response after fetching &ndash; `200` means good to go.
+> ```node
+> console.log(response.status);
+> ```
