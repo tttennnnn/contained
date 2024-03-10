@@ -41,7 +41,9 @@ Note: Using **volume** for database persistent storage.
 ```shell
 docker compose up -d
 ```
-This should create a network, a volume, and two containers. Make sure that said volume is empty or does not already exist if you are doing this the first time. Now port `3000` on `localhost` should be listened by the app.
+This should create a network, a volume, and two containers. Make sure that said volume is empty or does not already exist if you are doing this the first time. 
+- Port `3000` on `localhost` should now be listened by the app. 
+- MySQL service is mapped to port `3001`.
 
 
 Do the following if a clean reset is needed.
