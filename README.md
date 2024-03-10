@@ -1,15 +1,12 @@
-make sure volume does alr not exist or only exist as empty
+## Simple dockerized Express.js & MySQL system
 
 
+The provided `compose.yaml` composed of 2 services
+- Express.js router
+- MySQL server
 
-## Simple dockerized Express.js & MySQL container system
 
-
-This repository ⛺ provides `compose.yaml` composed of 2 services
-- Express.js App
-- MySQL Server
-
-Here, I am using **volume** for the database service. This can also be done with a bind mount or without any persistent storage at all.
+Note: Using **volume** for database persistent storage.
 
 ## Environment Overview
 - Express.js
@@ -27,9 +24,10 @@ Here, I am using **volume** for the database service. This can also be done with
     - `MYSQL_USER` = *user*
     - `MYSQL_PASSWORD` = *userpw*
     - `MYSQL_DATABASE` = *myapp*
-        - One schema storing app users.
-          ```
-          ~$ describe user;
+    - init file under `mysql_init/`
+  
+        - ```
+          ~$ describe myapp.user;
           +-----------------------+----------+------+-----+---------+-------+
           | Field                 | Type     | Null | Key | Default | Extra |
           +-----------------------+----------+------+-----+---------+-------+
@@ -38,40 +36,28 @@ Here, I am using **volume** for the database service. This can also be done with
           +-----------------------+----------+------+-----+---------+-------+
           ```
 
-## Quick Setup
-1. Create volume
-```shell
-docker volume create myapp_volume
-```
+## Setup
 
-2. Run docker compose
 ```shell
-docker compose up
+docker compose up -d
 ```
+This should create a network, a volume, and two containers. Make sure that said volume is empty or does not already exist if you are doing this the first time. Now port `3000` on `localhost` should be listened by the app.
+
+
+Do the following if a clean reset is needed.
+```shell
+docker compose down && docker volume rm myapp_mysql_vol
+```
+And then go back to upping the compose.
 
 ## Usage
 Supporting `routes` of the current version:
-- `/user/auth` &ndash; GET
-- `/user/register` &ndash; POST
+- `/` &ndash; GET
+- `/user/auth` &ndash; POST
+- `/user/register` &ndash; POST (still a dummy)
 
-Both routes with JSON body
-```json
-{ "user": "...", "authStr": "..." }
-```
+Under `test/` is a sample test file requesting `http://localhost:3000/user/auth` route.
 
-### Fetching
-This is normally done with node-fetch.
-```node
-const response = await fetch('http://localhost:3000/user/register', {
-    method: "POST",
-    body: {
-        user: "...",
-        authStr: "..."
-    }
-});
-const data = await response.json();
-return data;
-```
 > **_NOTE:_** Check the status code of response after fetching &ndash; `200` means good to go.
 > ```node
 > console.log(response.status);
