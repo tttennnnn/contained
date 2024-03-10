@@ -1,29 +1,41 @@
+name: myapp
 version: '3'
 services:
   mysql:
+    container_name: myapp_mysql
     image: mysql/mysql-server:8.0.32
-    container_name: compose_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: rootpw
-      MYSQL_USER: &user user
-      MYSQL_PASSWORD: &userpw userpw
-      MYSQL_DATABASE: &db myapp
-    network: mynet
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      # bind mount init
+      - ./mysql_init:/docker-entrypoint-initdb.d:ro
+      # volume
+      - mysql_vol:/var/lib/mysql
+    ports: [3001:3306]
+    networks: 
+      - mynet
 
   express:
+    container_name: myapp_express
     build: .
-    container_name: compose_express
     depends_on:
-      - "mysql"
+      mysql:
+        condition: service_healthy
     environment:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
-      MYSQL_USER: *user
-      MYSQL_PASSWORD: *userpw
-      MYSQL_DATABASE: *db
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports: [3000:3000]
-    network: mynet
+    networks: 
+      - mynet
 
-network:
+volumes:
+  mysql_vol:
+
+networks:
   mynet:
-    driver: default

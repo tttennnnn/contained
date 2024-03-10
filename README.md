@@ -1,3 +1,7 @@
+make sure volume does alr not exist or only exist as empty
+
+
+
 ## Simple dockerized Express.js & MySQL container system
 
 
