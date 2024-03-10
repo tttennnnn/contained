@@ -4,6 +4,7 @@ CREATE TABLE user(
     PRIMARY KEY (user)
 );
 
-INSERT INTO user VALUES('user1', 'auth1');
-INSERT INTO user VALUES('user2', 'auth2');
-INSERT INTO user VALUES('user3', 'auth3');
+INSERT INTO user VALUES
+('user1', 'auth1'),
+('user2', 'auth2'),
+('user3', 'auth3');
