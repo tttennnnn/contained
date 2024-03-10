@@ -14,7 +14,6 @@ services:
       - ./mysql_init:/docker-entrypoint-initdb.d:ro
       # volume
       - mysql_vol:/var/lib/mysql
-    ports: [3001:3306]
     networks: 
       - mynet
 
