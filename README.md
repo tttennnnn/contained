@@ -23,7 +23,7 @@ Here, I am using **volume** for the database service. This can also be done with
     - `MYSQL_USER` = *user*
     - `MYSQL_PASSWORD` = *userpw*
     - `MYSQL_DATABASE` = *myapp*
-        - One table storing app users.
+        - One schema storing app users.
           ```
           ~$ describe user;
           +-----------------------+----------+------+-----+---------+-------+
