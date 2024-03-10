@@ -34,14 +34,6 @@ Here, I am using **volume** for the database service. This can also be done with
           +-----------------------+----------+------+-----+---------+-------+
           ```
 
-```sql
-CREATE TABLE user(
-    user CHAR(32) NOT NULL DAFAULT '',
-    authentication_string TEXT,
-    PRIMARY KEY (user)
-);
-```
-
 ## Quick Setup
 1. Create volume
 ```shell
